@@ -1,0 +1,21 @@
+﻿@model BookStore.Models.ViewModels.GenreViewModel
+@{
+    ViewData["Title"] = "Добавление нового жанра";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="card">
+    <div class="card-header">
+        <h1>Добавление нового жанра</h1>
+    </div>
+    <div class="card-body">
+        <form>
+            <div class="mb-3">
+                <label asp-for="Name" class="form-label">Название</label>
+                <input type="text" class="form-control" asp-for="Name">
+            </div>
+            <button type="submit" class="btn btn-primary">Сохранить</button>
+        </form>
+    </div>
+</div>
+

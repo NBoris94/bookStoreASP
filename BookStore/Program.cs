@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Repository;
+using Repository.GenreRepo;
+using Service.GenreSer;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,6 +11,10 @@ builder.Services.AddDbContext<ApplicationContext>(options => options.UseSqlServe
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddScoped(typeof(IGenreRepository), typeof(GenreRepository));
+
+builder.Services.AddScoped<IGenreService, GenreService>();
 
 var app = builder.Build();
 

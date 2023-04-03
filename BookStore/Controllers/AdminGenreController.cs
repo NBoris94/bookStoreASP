@@ -1,0 +1,64 @@
+﻿using BookStore.Models.ViewModels;
+using Data;
+using Microsoft.AspNetCore.Mvc;
+using Service.GenreSer;
+
+namespace BookStore.Controllers
+{
+    public class AdminGenreController : Controller
+    {
+        private IGenreService _genreService;
+
+        public AdminGenreController(IGenreService genreService)
+        {
+            _genreService = genreService;
+        }
+
+        public IActionResult GenresList()
+        {
+            List<GenreViewModel> model = new List<GenreViewModel>();
+            List<Genre> genres = _genreService.GetGenres();
+
+            foreach(Genre genre in genres)
+            {
+                GenreViewModel item = new GenreViewModel { 
+                    Id = genre.Id,
+                    Name = genre.Name,
+                    CreatedDate = genre.CreatedDate,
+                    ModifiedDate = genre.ModifiedDate
+                };
+
+            }
+
+            return View(model);
+        }
+
+        [HttpGet]
+        public IActionResult Create()
+        {
+            GenreViewModel model = new GenreViewModel();
+            return View(model);
+        }
+
+        [HttpPost]
+        public IActionResult Create(GenreViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                Genre genre = new Genre
+                {
+                    Id = model.Id,
+                    Name = model.Name,
+                    CreatedDate = DateTime.Now,
+                    ModifiedDate = DateTime.Now,
+                };
+
+                _genreService.CreateGenre(genre);
+
+                return RedirectToAction("GenresList", "AdminGenre");
+            }
+
+            return View(model);
+        }
+    }
+}

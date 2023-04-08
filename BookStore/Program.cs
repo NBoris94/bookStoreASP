@@ -14,7 +14,7 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.AddScoped(typeof(IGenreRepository), typeof(GenreRepository));
 
-builder.Services.AddScoped<IGenreService, GenreService>();
+builder.Services.AddTransient<IGenreService, GenreService>();
 
 var app = builder.Build();
 

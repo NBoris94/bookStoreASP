@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Service.BookSer
 {
-    public class BookService
+    public class BookService : IBookService
     {
         private IBookRepository _repository;
 

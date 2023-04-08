@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Service.GenreSer
 {
-    public class GenreService
+    public class GenreService : IGenreService
     {
         private IGenreRepository _repository;
 

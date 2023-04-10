@@ -1,15 +1,16 @@
 ﻿@model BookStore.Models.ViewModels.GenreViewModel
 @{
-    ViewData["Title"] = "Добавление нового жанра";
+    ViewData["Title"] = "Редактирование жанра";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
 <div class="card">
     <div class="card-header">
-        <h1>Добавление нового жанра</h1>
+        <h1>Редактирование жанра</h1>
     </div>
     <div class="card-body">
-        <form asp-controller="AdminGenre" asp-action="Create" method="post">
+        <form asp-controller="AdminGenre" asp-action="Update" method="post">
+            <input type="hidden" asp-for="Id" />
             <div class="mb-3">
                 <label asp-for="Name" class="form-label">Название</label>
                 <input type="text" class="form-control" asp-for="Name">
@@ -18,4 +19,3 @@
         </form>
     </div>
 </div>
-

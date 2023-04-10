@@ -27,7 +27,7 @@ namespace BookStore.Controllers
                     CreatedDate = genre.CreatedDate,
                     ModifiedDate = genre.ModifiedDate
                 };
-
+                model.Add(item);
             }
 
             return View(model);
@@ -59,6 +59,43 @@ namespace BookStore.Controllers
             }
 
             return View(model);
+        }
+
+        [HttpGet]
+        public IActionResult Update(int Id)
+        {
+            Genre genre = _genreService.GetGenreById(Id);
+            GenreViewModel model = new GenreViewModel
+            {
+                Id = Id,
+                Name = genre.Name
+            };
+            return View(model);
+        }
+
+        [HttpPost]
+        public IActionResult Update(GenreViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                Genre genre = _genreService.GetGenreById(model.Id);
+
+                genre.Name = model.Name;
+                genre.ModifiedDate = DateTime.Now;
+
+                _genreService.UpdateGenre(genre);
+
+                return RedirectToAction("GenresList", "AdminGenre");
+            }
+
+            return View(model);
+        }
+
+        [HttpPost]
+        public IActionResult Delete(int Id)
+        {
+            _genreService.DeleteGenre(Id);
+            return RedirectToAction("GenresList", "AdminGenre");
         }
     }
 }

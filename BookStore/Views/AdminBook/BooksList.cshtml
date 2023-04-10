@@ -1,24 +1,24 @@
-﻿@model List<BookStore.Models.ViewModels.GenreViewModel>
+﻿@model List<BookStore.Models.ViewModels.BookViewModel>
 @{
-    ViewData["Title"] = "Список жанров";
+    ViewData["Title"] = "Список книг";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
 <div class="card">
     <div class="card-header">
-        <h1>Список жанров</h1>
+        <h1>Список книг</h1>
     </div>
     <div class="card-body">
         <div class="row">
             <div class="col-3">
-                <a class="btn btn-primary" asp-controller="AdminGenre" asp-action="Create">Добавить жанр</a>
+                <a class="btn btn-primary" asp-controller="AdminBook" asp-action="Create">Добавить книгу</a>
             </div>
         </div>
         <div class="row">
             <div class="col-12">
                 @if (Model.Count == 0)
                 {
-                    <p>Список жанров пуст</p>
+                    <p>Список книг пуст</p>
                 }
                 else
                 {
@@ -27,6 +27,7 @@
                             <tr>
                                 <th>№</th>
                                 <th>Название</th>
+                                <th>Цена</th>
                                 <th>Дата создания</th>
                                 <th>Дата изменения</th>
                                 <th>Действия</th>
@@ -37,19 +38,20 @@
                             {
                                 <tr>
                                     <td>@(item.index + 1)</td>
-                                    <td>@item.value.Name</td>
+                                    <td>@item.value.Title</td>
+                                    <td>@item.value.Price</td>
                                     <td>@item.value.CreatedDate</td>
                                     <td>@item.value.ModifiedDate</td>
                                     <td>
                                         <div class="btn-group btn-group-sm">
-                                            <a class="btn btn-dark" asp-controller="AdminGenre" asp-action="Update" asp-route-Id="@item.value.Id">
+                                            <a class="btn btn-dark" asp-controller="AdminBook" asp-action="Update" asp-route-Id="@item.value.Id">
                                                 Редактировать
                                             </a>
                                             <button class="btn btn-danger" type="submit" form="delete-form-@item.value.Id">
                                                 Удалить
                                             </button>
                                         </div>
-                                        <form class="delete-form" asp-controller="AdminGenre" asp-action="Delete" asp-route-Id="@item.value.Id" method="post" id="delete-form-@item.value.Id" data-name="@item.value.Name"></form>
+                                        <form class="delete-form" asp-controller="AdminBook" asp-action="Delete" asp-route-Id="@item.value.Id" method="post" id="delete-form-@item.value.Id" data-name="@item.value.Title"></form>
                                     </td>
                                 </tr>
                             }
@@ -70,7 +72,7 @@
                 <button type="button" class="btn-close" data-coreui-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                Вы действительно хотите удалить жанр <span></span>
+                Вы действительно хотите удалить книгу <span></span>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-danger" id="deleteModalConfirm">Удалить</button>
@@ -95,7 +97,7 @@
             const modalConfirm = deleteModal._dialog.querySelector('#deleteModalConfirm')
 
             modalSpan.innerHTML = name
-            
+
             deleteModal.show()
 
             modalConfirm.addEventListener('click', () => {

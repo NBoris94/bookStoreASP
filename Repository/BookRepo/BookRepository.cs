@@ -29,17 +29,20 @@ namespace Repository.BookRepo
         public void Create(Book book)
         {
             _context.Books.Add(book);
+            _context.SaveChanges();
         }
 
         public void Update(Book book)
         {
             _context.Books.Update(book);
+            _context.SaveChanges();
         }
 
         public void Delete(int id)
         {
             Book book = Get(id);
             _context.Books.Remove(book);
+            _context.SaveChanges();
         }
     }
 }

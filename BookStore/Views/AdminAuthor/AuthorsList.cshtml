@@ -1,0 +1,112 @@
+﻿@model List<BookStore.Models.ViewModels.AuthorViewModel>
+@{
+    ViewData["Title"] = "Список авторов";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="card">
+    <div class="card-header">
+        <h1>Список авторов</h1>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-3">
+                <a class="btn btn-primary" asp-controller="AdminAuthor" asp-action="Create">Добавить Автора</a>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                @if (Model.Count == 0)
+                {
+                    <p>Список авторов пуст</p>
+                }
+                else
+                {
+                    <table class="table table-striped table-hover">
+                        <thead>
+                            <tr>
+                                <th>№</th>
+                                <th>ФИО</th>
+                                <th>Дата создания</th>
+                                <th>Дата изменения</th>
+                                <th>Действия</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.Select((value, index) => new { index, value }))
+                            {
+                                <tr>
+                                    <td>@(item.index + 1)</td>
+                                    <td>@item.value.Name</td>
+                                    <td>@item.value.CreatedDate</td>
+                                    <td>@item.value.ModifiedDate</td>
+                                    <td>
+                                        <div class="btn-group btn-group-sm">
+                                            <a class="btn btn-dark" asp-controller="AdminAuthor" asp-action="Update" asp-route-Id="@item.value.Id">
+                                                Редактировать
+                                            </a>
+                                            <button class="btn btn-danger" type="submit" form="delete-form-@item.value.Id">
+                                                Удалить
+                                            </button>
+                                        </div>
+                                        <form class="delete-form" asp-controller="AdminAuthor" asp-action="Delete" asp-route-Id="@item.value.Id" method="post" id="delete-form-@item.value.Id" data-name="@item.value.Name"></form>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="delete-modal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalLabel">Подтвердите удаление</h5>
+                <button type="button" class="btn-close" data-coreui-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Вы действительно хотите удалить автора <span></span>?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" id="deleteModalConfirm">Удалить</button>
+                <button type="button" class="btn btn-secondary" data-coreui-dismiss="modal">Отмена</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        const deleteForms = document.querySelectorAll('.delete-form')
+        const deleteModal = new coreui.Modal('#delete-modal', {
+            focus: true
+        })
+
+        const handleDelete = (e) => {
+            e.preventDefault()
+
+            const name = e.target.getAttribute('data-name')
+            const modalSpan = deleteModal._dialog.querySelector('.modal-body span')
+            const modalConfirm = deleteModal._dialog.querySelector('#deleteModalConfirm')
+
+            modalSpan.innerHTML = name
+
+            deleteModal.show()
+
+            modalConfirm.addEventListener('click', () => {
+                deleteModal.hide()
+
+                e.target.submit()
+            })
+        }
+
+        deleteForms.forEach(deleteForm => {
+            deleteForm.addEventListener('submit', handleDelete)
+        })
+    </script>
+}

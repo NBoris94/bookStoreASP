@@ -1,7 +1,9 @@
 using Microsoft.EntityFrameworkCore;
 using Repository;
+using Repository.AuthorRepo;
 using Repository.BookRepo;
 using Repository.GenreRepo;
+using Service.AuthorSer;
 using Service.BookSer;
 using Service.GenreSer;
 
@@ -15,9 +17,11 @@ builder.Services.AddDbContext<ApplicationContext>(options => options.UseSqlServe
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddScoped(typeof(IGenreRepository), typeof(GenreRepository));
+builder.Services.AddScoped(typeof(IAuthorRepository), typeof(AuthorRepository));
 builder.Services.AddScoped(typeof(IBookRepository), typeof(BookRepository));
 
 builder.Services.AddTransient<IGenreService, GenreService>();
+builder.Services.AddTransient<IAuthorService, AuthorService>();
 builder.Services.AddTransient<IBookService, BookService>();
 
 var app = builder.Build();

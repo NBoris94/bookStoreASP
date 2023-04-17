@@ -47,7 +47,6 @@ namespace BookStore.Controllers
             {
                 Genre genre = new Genre
                 {
-                    Id = model.Id,
                     Name = model.Name,
                     CreatedDate = DateTime.Now,
                     ModifiedDate = DateTime.Now,

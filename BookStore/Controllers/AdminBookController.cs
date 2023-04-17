@@ -1,16 +1,20 @@
 ﻿using BookStore.Models.ViewModels;
 using Data;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Service.AuthorSer;
 using Service.BookSer;
 
 namespace BookStore.Controllers
 {
     public class AdminBookController : Controller
     {
+        private IAuthorService _authorService;
         private IBookService _bookService;
-        
-        public AdminBookController(IBookService bookService)
+
+        public AdminBookController(IAuthorService authorService, IBookService bookService)
         {
+            _authorService = authorService;
             _bookService = bookService;
         }
 
@@ -40,7 +44,23 @@ namespace BookStore.Controllers
         [HttpGet]
         public IActionResult Create()
         {
+            List<Author> authors = _authorService.GetAuthors();
             BookViewModel model = new BookViewModel();
+            List<AuthorViewModel> authorsList = new List<AuthorViewModel>();
+
+            foreach (Author author in authors)
+            {
+                AuthorViewModel authorViewModel = new AuthorViewModel
+                {
+                    Id = author.Id,
+                    Name = author.Name
+                };
+
+                authorsList.Add(authorViewModel);
+            }
+
+            model.Authors = new SelectList(authorsList, "Id", "Name");
+
             return View(model);
         }
 
@@ -103,11 +123,6 @@ namespace BookStore.Controllers
             _bookService.DeleteBook(Id);
             return RedirectToAction("BooksList", "AdminBook");
         }
-
-
-
-
-
 
     }
 

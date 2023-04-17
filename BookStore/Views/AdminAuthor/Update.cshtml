@@ -1,0 +1,22 @@
+﻿@model BookStore.Models.ViewModels.AuthorViewModel
+@{
+    ViewData["Title"] = "Редактирование автора";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="card">
+    <div class="card-header">
+        <h1>Редактирование автора</h1>
+    </div>
+    <div class="card-body">
+        <form asp-controller="AdminAuthor" asp-action="Update" method="post">
+            <input type="hidden" asp-for="Id" />
+            <div class="mb-3">
+                <label asp-for="Name" class="form-label">ФИО</label>
+                <input type="text" class="form-control" asp-for="Name">
+            </div>
+            <button type="submit" class="btn btn-primary">Сохранить</button>
+        </form>
+    </div>
+</div>
+

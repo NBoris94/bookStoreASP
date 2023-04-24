@@ -1,0 +1,105 @@
+﻿
+@{
+    ViewData["Title"] = "Form";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div id="userInfo" style="display:none">
+    <p>Добро пожаловать <span id="userName"></span></p>
+    <form id="logout">
+        <button type="submit">Выйти</button>
+    </form>
+</div>
+
+<div id="login">
+    <h1>Вход</h1>
+
+    <form id="login-form">
+        <div>
+            <label for="email">Email</label> <br />
+            <input type="email" id="email" />
+        </div>
+        <div>
+            <label for="password">Пароль</label> <br />
+            <input type="password" id="password" />
+        </div>
+        <button type="submit">Войти</button>
+    </form>
+</div>
+
+<form id="getData">
+    <button type="submit">Получить данные</button>
+</form>
+
+@section Scripts {
+    <script>
+        const tokenKey = "accessToken"
+        const loginForm = document.querySelector('#login-form')
+        const getData = document.querySelector('#getData')
+        const logout = document.querySelector('#logout')
+        const userInfo = document.querySelector('#userInfo')
+
+        loginForm.addEventListener('submit', async e => {
+            e.preventDefault()
+
+            const response = await fetch("/login", {
+                method: "POST",
+                headers: {
+                    "Accept": "application/json",
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    email: document.querySelector('#email').value,
+                    password: document.querySelector('#password').value
+                })
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+
+                userInfo.querySelector("#userName").innerText = data.username
+                userInfo.style.display = "block";
+                loginForm.style.display = "none";
+
+                sessionStorage.setItem(tokenKey, data.access_token)
+            }
+            else {
+                console.log("Status: ", response.status)
+            }
+        })
+
+        getData.addEventListener('submit', async e => {
+            e.preventDefault()
+
+            const token = sessionStorage.getItem(tokenKey);
+
+            const response = await fetch("/data", {
+                method: "GET",
+                headers: {
+                    "Accept": "application/json",
+                    "Authorization": "Bearer " + token
+                }
+            });
+
+            if (response.ok) {
+                const data = await response.json()
+
+                console.log("Данные от сервера: ", data.message)
+            }
+            else {
+                console.log("Status: ", response.status)
+            }
+        })
+
+        logout.addEventListener('submit', async e => {
+            e.preventDefault()
+
+            userInfo.querySelector("#userName").innerText = ""
+            userInfo.style.display = "none";
+            loginForm.style.display = "block";
+
+            sessionStorage.removeItem(tokenKey)
+        })
+
+    </script>
+}

@@ -29,7 +29,7 @@ namespace BookStore.Controllers
             if (ModelState.IsValid)
             {
                 var result =
-                    await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, false);
+                    await _signInManager.PasswordSignInAsync(model.Email, model.Password, true, false);
                 if (result.Succeeded)
                 {
                     return RedirectToAction("BooksList", "AdminBook");

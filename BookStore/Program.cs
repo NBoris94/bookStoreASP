@@ -1,9 +1,6 @@
 using Data;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
 using Repository;
 using Repository.AuthorRepo;
 using Repository.BookRepo;
@@ -11,9 +8,7 @@ using Repository.GenreRepo;
 using Service.AuthorSer;
 using Service.BookSer;
 using Service.GenreSer;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
+
 
 var builder = WebApplication.CreateBuilder(args);
 

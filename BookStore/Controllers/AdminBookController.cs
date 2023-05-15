@@ -1,4 +1,5 @@
 ﻿using BookStore.Models.ViewModels;
+using BookStore.Models.ViewModels.Default;
 using Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -18,11 +19,11 @@ namespace BookStore.Controllers
             _bookService = bookService;
         }
 
-        public IActionResult BooksList()
+        public async Task<IActionResult> BooksList(string? search, SortState sortOrder = SortState.NameAsc, int page = 1)
         {
-            List<BookViewModel> model = new List<BookViewModel>();
+            int pageSize = 2;
+            List<BookViewModel> booksViewModel = new List<BookViewModel>();
             List<Book> books = _bookService.GetBooks();
-        
 
             foreach (Book book in books)
             {
@@ -33,9 +34,26 @@ namespace BookStore.Controllers
                     CreatedDate = book.CreatedDate,
                     ModifiedDate = book.ModifiedDate
                 };
-        
-                model.Add(bvm);
+
+                booksViewModel.Add(bvm);
             }
+
+            booksViewModel = sortOrder switch
+            {
+                SortState.NameDesc => booksViewModel.OrderByDescending(b => b.Title).ToList(),
+                _ => booksViewModel.OrderBy(b => b.Title).ToList()
+            };
+
+            int count = booksViewModel.Count();
+            booksViewModel = booksViewModel.Skip((page - 1) * pageSize).Take(pageSize).ToList();
+
+            BooksListViewModel model = new BooksListViewModel
+            ( 
+                booksViewModel,
+                new PageViewModel(count, page, pageSize),
+                new SortViewModel(sortOrder)
+            );
+
             return View(model);
         }
 
@@ -77,6 +95,7 @@ namespace BookStore.Controllers
                     Description = model.Description,
                     CreatedDate = DateTime.Now,
                     ModifiedDate = DateTime.Now,
+                    AuthorId = model.AuthorId
                 };
 
                 _bookService.CreateBook(book);

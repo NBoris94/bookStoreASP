@@ -1,4 +1,7 @@
-﻿@model List<BookStore.Models.ViewModels.BookViewModel>
+﻿@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, BookStore
+
+@model BookStore.Models.ViewModels.BooksListViewModel
 @{
     ViewData["Title"] = "Список книг";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
@@ -16,7 +19,7 @@
         </div>
         <div class="row">
             <div class="col-12">
-                @if (Model.Count == 0)
+                @if (Model.Books.Count == 0)
                 {
                     <p>Список книг пуст</p>
                 }
@@ -26,7 +29,15 @@
                         <thead>
                             <tr>
                                 <th>№</th>
-                                <th>Название</th>
+                                <th>
+                                    <a
+                                        asp-controller="AdminBook"
+                                        asp-action="BooksList"
+                                        asp-route-sortOrder="@Model.SortViewModel.NameSort"
+                                    >
+                                        Название
+                                    </a>
+                                </th>
                                 <th>Цена</th>
                                 <th>Дата создания</th>
                                 <th>Дата изменения</th>
@@ -34,7 +45,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach (var item in Model.Select((value, index) => new { index, value }))
+                            @foreach (var item in Model.Books.Select((value, index) => new { index, value }))
                             {
                                 <tr>
                                     <td>@(item.index + 1)</td>
@@ -57,6 +68,12 @@
                             }
                         </tbody>
                     </table>
+
+                    <page-link
+                        page-view-model="Model.PageViewModel"
+                        page-action="BooksList"
+                        page-url-sortOrder="@(Model.SortViewModel.Current)"
+                    ></page-link>
                 }
             </div>
         </div>

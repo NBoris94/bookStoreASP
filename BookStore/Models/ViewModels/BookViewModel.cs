@@ -12,6 +12,8 @@ namespace BookStore.Models.ViewModels
         public DateTime ModifiedDate { get; set; }
         
         public int AuthorId { get; set; }
-        public SelectList Authors { get; set; }
+        public SelectList? Authors { get; set; }
+        public int GenreId { get; set; }
+        public SelectList? Genres { get; set; }
     }
 }
